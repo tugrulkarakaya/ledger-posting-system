@@ -1,2 +1,2 @@
-# lesger-posting-system
+# ledger-posting-system
 Zing Payment System Assessment Project
