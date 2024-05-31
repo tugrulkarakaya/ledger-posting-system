@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the Maven/Gradle build file and project files
-COPY target/ledger-posting-system-0.0.1.jar /app/ledger-system.jar
+COPY target/ledger-posting-system-0.0.1-SNAPSHOT.jar /app/ledger-system.jar
 
 # Expose the port that the application runs on
 EXPOSE 8080
