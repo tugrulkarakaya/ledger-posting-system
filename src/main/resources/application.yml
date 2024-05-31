@@ -1,0 +1,60 @@
+spring:
+  profiles:
+    active: dev # Change to 'prod' for production
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+    initialization-mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# H2 Console settings for development
+h2:
+  console:
+    enabled: true
+    path: /h2-console
+
+# Logging settings
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate: INFO
+
+# Separate configuration for production
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/yourdbname
+    driver-class-name: org.postgresql.Driver
+    username: yourusername
+    password: yourpassword
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Logging settings for production
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    org.hibernate: WARN
