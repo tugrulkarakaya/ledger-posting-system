@@ -1,4 +1,4 @@
-package co.uk.zing.controller;
+package co.uk.zing.ledger.command.controller;
 
 import co.uk.zing.ledger.account.Account;
 import co.uk.zing.ledger.account.AccountService;
