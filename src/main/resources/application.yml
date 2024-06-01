@@ -16,6 +16,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  kafka:
+    bootstrap-servers: kafka:9092
 
 # H2 Console settings for development
 h2:
@@ -51,6 +53,8 @@ spring:
       hibernate:
         format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: kafka:9092
 
 # Logging settings for production
 logging:
