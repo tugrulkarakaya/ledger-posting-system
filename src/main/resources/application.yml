@@ -3,11 +3,10 @@ spring:
     active: dev # Change to 'prod' for production
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-    initialization-mode: always
+    url: jdbc:postgresql://localhost:5432/ledger
+    username: ledger_user
+    password: ledger_password
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
