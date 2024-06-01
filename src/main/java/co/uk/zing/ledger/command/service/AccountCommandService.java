@@ -5,6 +5,8 @@ import co.uk.zing.ledger.command.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class AccountCommandService {
 
@@ -19,5 +21,10 @@ public class AccountCommandService {
         return accountRepository.save(account);
     }
 
-    // Other account related command methods
+    public Account createAccount(String name) {
+        Account account = new Account();
+        account.setName(name);
+        account.setBalance(BigDecimal.valueOf(0.0));
+        return accountRepository.save(account);
+    }
 }

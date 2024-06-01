@@ -20,6 +20,6 @@ public class Account {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
-    private String accountId;
+    private String name;
     private BigDecimal balance;
 }

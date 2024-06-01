@@ -1,15 +1,13 @@
 package co.uk.zing.ledger.command.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -20,14 +18,11 @@ import java.util.UUID;
 public class Transaction {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
-    private String transactionId;
-    private String sourceAccountId;
-    private String destinationAccountId;
-    private BigDecimal amount;
-    private LocalDateTime transactionTime;
+    private LocalDateTime timestamp;
+    private String status;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Entry> entries;
+
 }
