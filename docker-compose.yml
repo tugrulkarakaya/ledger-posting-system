@@ -31,6 +31,7 @@ services:
     container_name: ledger_app
     depends_on:
       - kafka
+      - postgres
     build:
       context: .
       dockerfile: Dockerfile
@@ -42,6 +43,16 @@ services:
     networks:
       - kafka-net
 
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ledger
+      POSTGRES_USER: ledger_user
+      POSTGRES_PASSWORD: ledger_password
+    ports:
+      - "5432:5432"
+    networks:
+      - kafka-net
 networks:
   kafka-net:
     driver: bridge
