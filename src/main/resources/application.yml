@@ -38,8 +38,12 @@ h2:
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
-    org.hibernate: INFO
+    org:
+      hibernate: INFO
+      springframework:
+        web: DEBUG
+        kafka: DEBUG
+
 
 # Separate configuration for production
 ---

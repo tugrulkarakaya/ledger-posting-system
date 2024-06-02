@@ -36,6 +36,10 @@ public class ForexCommandHandlerService {
     }
     @Transactional
     public void handle(ForexCommand command) {
+        if (isProcessed(command.getRequestId())) {
+            return;
+        }
+
         // Validate accounts and balance
         Account sourceAccount = accountRepository.findById(UUID.fromString(command.getSourceAccountId())).orElseThrow();
         Account destinationAccount = accountRepository.findById(UUID.fromString(command.getDestinationAccountId())).orElseThrow();
@@ -49,22 +53,26 @@ public class ForexCommandHandlerService {
         BigDecimal convertedAmount = command.getAmount().multiply(command.getExchangeRate());
         Entry creditEntry = new Entry(UUID.randomUUID(), destinationAccount.getId(), convertedAmount, LocalDateTime.now(), "Forex", "Credit");
 
+        // Update account pending balances (not posted yet)
+        sourceAccount.debit(command.getAmount());
+        destinationAccount.credit(convertedAmount);
+
+        accountRepository.save(sourceAccount);
+        accountRepository.save(destinationAccount);
+
         // Create transaction
         Transaction transaction = new Transaction();
         transaction.setId(UUID.randomUUID());
         transaction.setType("Forex");
-        transaction.setStatus("Pending");
+        transaction.setStatus("Pending"); //ToDo: Convert To Enum
         transaction.setEntries(Arrays.asList(debitEntry, creditEntry));
         transaction.setCreatedAt(LocalDateTime.now());
 
         // Persist transaction
         transactionRepository.save(transaction);
 
-        // Generate idempotency key
-        String idempotencyKey = UUID.randomUUID().toString();
-
         // Publish events
-        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction, idempotencyKey));
+        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction));
         //ToDo: where is event listener
     }
 }
