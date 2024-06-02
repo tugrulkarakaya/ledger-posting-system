@@ -8,12 +8,14 @@ import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.AccountNotFoundException;
 import co.uk.zing.ledger.exception.InsufficientFundsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -53,6 +55,31 @@ public class AccountCommandService {
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
     }
+
+//    @EventListener
+//    public void onEvent(Event event) {
+//        // Process transaction event
+//        Transaction transaction = event.getTransaction();
+//        List<Entry> entries = transaction.getEntries();
+//
+//        for (Entry entry : entries) {
+//            Account account = accountRepository.findById(entry.getAccountId())
+//                    .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+//
+//            if (entry.getType() == EntryType.DEBIT) {
+//                account.addPendingDebit(entry.getAmount());
+//            } else {
+//                account.addPendingCredit(entry.getAmount());
+//            }
+//
+//            accountRepository.save(account);
+//        }
+//
+//        // Update transaction status
+//        transaction.setStatus(TransactionStatus.POSTED);
+//        transaction.setUpdatedAt(LocalDateTime.now());
+//        transactionRepository.save(transaction);
+//    }
 
     public Account createAccount(String currency) {
         Account account = new Account();
