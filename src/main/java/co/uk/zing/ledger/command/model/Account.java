@@ -1,6 +1,7 @@
 package co.uk.zing.ledger.command.model;
 
 import co.uk.zing.ledger.exception.InsufficientFundsException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,17 +22,13 @@ import java.util.UUID;
 public class Account {
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
     private String currency;
-    private BigDecimal balance;
-    private BigDecimal postedDebits;
-    private BigDecimal postedCredits;
-    private BigDecimal pendingDebits;
-    private BigDecimal pendingCredits;
+    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal postedDebits = BigDecimal.ZERO;
+    private BigDecimal postedCredits = BigDecimal.ZERO;
+    private BigDecimal pendingDebits = BigDecimal.ZERO;
+    private BigDecimal pendingCredits = BigDecimal.ZERO;
 
     //ToDo: do not forget checking ObjectOptimisticLockingFailureException  exception is thrown or not.
     @Version
@@ -40,25 +37,39 @@ public class Account {
     public Account(UUID id, String currency) {
         this.id = id;
         this.currency = currency;
+        this.version = 0L;
         this.balance = BigDecimal.ZERO;
         this.postedDebits = BigDecimal.ZERO;
         this.postedCredits = BigDecimal.ZERO;
         this.pendingDebits = BigDecimal.ZERO;
         this.pendingCredits = BigDecimal.ZERO;
-        this.version = 0L;
     }
 
+    public BigDecimal getPostedCredits() {
+        return postedCredits != null ? postedCredits : BigDecimal.ZERO;
+    }
 
+    public BigDecimal getPostedDebits() {
+        return postedDebits != null ? postedDebits : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPendingDebits() {
+        return pendingDebits != null ? pendingDebits : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPendingCredits() {
+        return pendingCredits != null ? pendingCredits : BigDecimal.ZERO;
+    }
     public BigDecimal getPostedBalance() {
-        return postedCredits.subtract(postedDebits);
+        return getPostedCredits().subtract(getPostedDebits());
     }
 
     public BigDecimal getPendingBalance() {
-        return pendingCredits.subtract(pendingDebits);
+        return getPendingCredits().subtract(getPendingDebits());
     }
 
     public BigDecimal getAvailableBalance() {
-        return getPostedBalance().subtract(pendingDebits);
+        return getPostedBalance().subtract(getPendingDebits());
     }
 
     public void debit(BigDecimal amount) throws InsufficientFundsException {
@@ -71,17 +82,17 @@ public class Account {
         addPendingCredit(amount);
     }
     private void addPendingDebit(BigDecimal amount) {
-        this.pendingDebits = this.pendingDebits.add(amount);
+        this.pendingDebits = this.getPendingDebits().add(amount);
     }
 
     private void addPendingCredit(BigDecimal amount) {
-        this.pendingCredits = this.pendingCredits.add(amount);
+        this.pendingCredits = this.getPendingCredits().add(amount);
     }
 
     @Transactional
     public void postPendingEntries() {
-        this.postedDebits = this.postedDebits.add(this.pendingDebits);
-        this.postedCredits = this.postedCredits.add(this.pendingCredits);
+        this.postedDebits = getPostedDebits().add(getPendingDebits());
+        this.postedCredits = this.getPostedCredits().add(getPendingCredits());
         this.pendingDebits = BigDecimal.ZERO;
         this.pendingCredits = BigDecimal.ZERO;
     }
@@ -92,11 +103,11 @@ public class Account {
     }
 
     public void adjustPostedDebits(BigDecimal amount) {
-        this.postedDebits = this.postedDebits.add(amount);
+        this.postedDebits = getPostedDebits().add(amount);
     }
 
     public void adjustPostedCredits(BigDecimal amount) {
-        this.postedCredits = this.postedCredits.add(amount);
+        this.postedCredits = getPostedCredits().add(amount);
     }
 
     public void incrementVersion() {

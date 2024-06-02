@@ -43,7 +43,7 @@ public class ForexQueryController {
             @ApiResponse(responseCode = "404", description = "Accounts not found")
     })
     @GetMapping("/accounts/all")
-    public ResponseEntity<List<Account>> getAllAccounts(@PathVariable String accountId) {
+    public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accounts = accountQueryService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }

@@ -1,7 +1,6 @@
 package co.uk.zing.ledger.query.service;
 
 import co.uk.zing.ledger.command.model.Account;
-import co.uk.zing.ledger.command.model.Transaction;
 import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.AccountNotFoundException;
