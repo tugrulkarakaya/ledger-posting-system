@@ -1,7 +1,7 @@
 package co.uk.zing.ledger.query.controller;
 
 
-import co.uk.zing.ledger.command.ForexCommandHandler;
+import co.uk.zing.ledger.command.service.ForexCommandHandlerService;
 import co.uk.zing.ledger.command.model.Account;
 import co.uk.zing.ledger.query.service.AccountQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class ForexQueryController {
 
     @Autowired
-    private ForexCommandHandler forexCommandHandler;
+    private ForexCommandHandlerService forexCommandHandler;
 
     @Autowired
     private AccountQueryService accountQueryService;

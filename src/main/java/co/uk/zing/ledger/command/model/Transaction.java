@@ -24,7 +24,18 @@ public class Transaction {
     private LocalDateTime updatedAt;
     private String status; // Pending, Completed, Failed
 
+    @Column(unique = true)
+    private String requestId;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Entry> entries;
 
+    public Transaction(UUID id, String type, String status, List<Entry> entries, String requestId) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.entries = entries;
+        this.requestId = requestId;
+        this.createdAt =  LocalDateTime.now();
+    }
 }

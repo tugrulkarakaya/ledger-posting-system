@@ -47,7 +47,7 @@ public class AccountCommandService {
         Entry creditEntry = new Entry(UUID.randomUUID(), destinationAccountId, amount,  LocalDateTime.now() ,"Credit", "forex");
 
         // Create transaction
-        Transaction transaction = new Transaction(UUID.randomUUID(), "Forex", LocalDateTime.now(), null, "Completed", Arrays.asList(debitEntry, creditEntry));
+        Transaction transaction = new Transaction(UUID.randomUUID(), "Forex", "Completed", Arrays.asList(debitEntry, creditEntry), UUID.randomUUID().toString());
 
         // Save transaction
         transactionRepository.save(transaction);

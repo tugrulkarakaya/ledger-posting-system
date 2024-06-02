@@ -1,6 +1,8 @@
-package co.uk.zing.ledger.command;
+package co.uk.zing.ledger.command.service;
 
 
+import co.uk.zing.ledger.command.ForexCommand;
+import co.uk.zing.ledger.command.ForexTransactionCreatedEvent;
 import co.uk.zing.ledger.command.event.EventPublisher;
 import co.uk.zing.ledger.command.model.Account;
 import co.uk.zing.ledger.command.model.Entry;
@@ -18,7 +20,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @Service
-public class ForexCommandHandler {
+public class ForexCommandHandlerService {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -29,6 +31,9 @@ public class ForexCommandHandler {
     @Autowired
     private EventPublisher eventPublisher;
 
+    public boolean isProcessed(String requestId) {
+        return transactionRepository.findByRequestId(requestId).isPresent();
+    }
     @Transactional
     public void handle(ForexCommand command) {
         // Validate accounts and balance
@@ -36,7 +41,6 @@ public class ForexCommandHandler {
         Account destinationAccount = accountRepository.findById(UUID.fromString(command.getDestinationAccountId())).orElseThrow();
 
         if (sourceAccount.getAvailableBalance().compareTo(command.getAmount()) < 0) {
-            //ToDo: implemented different types of account balance (available balance etc)
             throw new InsufficientFundsException("Insufficient funds in source account");
         }
 
@@ -56,8 +60,11 @@ public class ForexCommandHandler {
         // Persist transaction
         transactionRepository.save(transaction);
 
+        // Generate idempotency key
+        String idempotencyKey = UUID.randomUUID().toString();
+
         // Publish events
-        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction));
+        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction, idempotencyKey));
         //ToDo: where is event listener
     }
 }

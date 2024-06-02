@@ -4,6 +4,7 @@ import co.uk.zing.ledger.exception.InsufficientFundsException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,10 @@ public class Account {
     private BigDecimal postedCredits;
     private BigDecimal pendingDebits;
     private BigDecimal pendingCredits;
-    private int version; // For optimistic locking
+
+    //ToDo: do not forget checking ObjectOptimisticLockingFailureException  exception is thrown or not.
+    @Version
+    private Long version; // For optimistic locking
 
     public Account(UUID id, String currency) {
         this.id = id;
@@ -41,7 +45,7 @@ public class Account {
         this.postedCredits = BigDecimal.ZERO;
         this.pendingDebits = BigDecimal.ZERO;
         this.pendingCredits = BigDecimal.ZERO;
-        this.version = 0;
+        this.version = 0L;
     }
 
 

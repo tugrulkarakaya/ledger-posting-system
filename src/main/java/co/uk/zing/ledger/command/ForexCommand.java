@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ForexCommand {
+    private String requestId;
     private String sourceAccountId;
     private String destinationAccountId;
     private BigDecimal amount;
