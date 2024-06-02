@@ -28,7 +28,7 @@ public class TransactionCommandService {
     public Transaction createTransaction(List<Entry> entries) {
         Transaction transaction = new Transaction();
         transaction.setEntries(entries);
-        transaction.setTimestamp(LocalDateTime.now());
+        transaction.setCreatedAt(LocalDateTime.now());
         transaction.setStatus("PENDING");
 
         return transactionRepository.save(transaction);
