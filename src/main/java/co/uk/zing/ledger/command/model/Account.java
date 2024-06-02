@@ -38,11 +38,6 @@ public class Account {
         this.id = id;
         this.currency = currency;
         this.version = 0L;
-        this.balance = BigDecimal.ZERO;
-        this.postedDebits = BigDecimal.ZERO;
-        this.postedCredits = BigDecimal.ZERO;
-        this.pendingDebits = BigDecimal.ZERO;
-        this.pendingCredits = BigDecimal.ZERO;
     }
 
     public BigDecimal getPostedCredits() {

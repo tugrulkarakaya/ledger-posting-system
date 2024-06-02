@@ -86,5 +86,23 @@ public class AccountCommandService {
         account.setCurrency(currency);
         return accountRepository.save(account);
     }
+
+    @Transactional
+    public void increasePostedDebits(UUID accountId, BigDecimal amount) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + accountId));
+
+        account.setPostedDebits(account.getPostedDebits().add(amount));
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    public void increasePostedCredits(UUID accountId, BigDecimal amount) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + accountId));
+
+        account.setPostedCredits(account.getPostedCredits().add(amount));
+        accountRepository.save(account);
+    }
 }
 
