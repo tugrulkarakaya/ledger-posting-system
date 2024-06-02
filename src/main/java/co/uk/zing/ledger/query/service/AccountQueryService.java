@@ -4,6 +4,7 @@ import co.uk.zing.ledger.command.model.Account;
 import co.uk.zing.ledger.command.model.Transaction;
 import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
+import co.uk.zing.ledger.exception.AccountNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,14 @@ public class AccountQueryService {
     private TransactionRepository transactionRepository;
 
     public Account getAccount(String accountId) {
-        return accountRepository.findById(UUID.fromString(accountId)).orElseThrow();
+        return accountRepository.findById(UUID.fromString(accountId)).orElseThrow(AccountNotFoundException::new);
     }
+
+
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
+    }
+
 //
 //    public List<Transaction> getTransactions(String accountId) {
 //        return transactionRepository.findById(UUID.fromString(accountId));

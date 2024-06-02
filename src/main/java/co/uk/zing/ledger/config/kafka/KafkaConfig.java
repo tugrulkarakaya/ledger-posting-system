@@ -1,4 +1,4 @@
-package co.uk.zing.ledger.kafka;
+package co.uk.zing.ledger.config.kafka;
 
 import co.uk.zing.ledger.command.ForexTransactionCreatedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
