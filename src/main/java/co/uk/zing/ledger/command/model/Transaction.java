@@ -19,8 +19,10 @@ public class Transaction {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
-    private LocalDateTime timestamp;
-    private String status;
+    private String type; // Forex
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String status; // Pending, Completed, Failed
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Entry> entries;

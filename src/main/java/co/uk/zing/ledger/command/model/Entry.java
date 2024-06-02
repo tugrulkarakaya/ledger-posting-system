@@ -25,4 +25,5 @@ public class Entry {
     private BigDecimal amount;
     private LocalDateTime entryTime;
     private String type;
+    private String direction; // Debit or Credit
 }

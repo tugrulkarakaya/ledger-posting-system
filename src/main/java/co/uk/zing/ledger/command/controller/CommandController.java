@@ -24,7 +24,7 @@ public class CommandController {
 
     @PostMapping("/accounts")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account createdAccount = accountCommandService.createAccount(account);
+        Account createdAccount = accountCommandService.createAccount(account.getCurrency());
         return ResponseEntity.ok(createdAccount);
     }
     @PostMapping("/accounts/name")
