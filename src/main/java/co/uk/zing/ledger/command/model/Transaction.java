@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +26,7 @@ public class Transaction {
     @Column(unique = true)
     private String requestId;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Entry> entries;
 
     public Transaction(UUID id, String type, String status, List<Entry> entries, String requestId) {

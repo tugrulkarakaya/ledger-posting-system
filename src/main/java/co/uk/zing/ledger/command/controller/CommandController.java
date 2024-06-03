@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/command")
 public class CommandController {
@@ -27,6 +30,7 @@ public class CommandController {
         Account createdAccount = accountCommandService.createAccount(account.getCurrency());
         return ResponseEntity.ok(createdAccount);
     }
+
     @PostMapping("/accounts/name")
     public Account createAccount(@RequestBody String name) {
         return accountCommandService.createAccount(name);
@@ -38,5 +42,21 @@ public class CommandController {
         return ResponseEntity.ok(createdTransaction);
     }
 
-    // Other command endpoints
+    @PostMapping("/{accountId}/increasePostedDebits")
+    public ResponseEntity<Void> increasePostedDebits(
+            @PathVariable UUID accountId,
+            @RequestParam BigDecimal amount) {
+
+        accountCommandService.increasePostedDebits(accountId, amount);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{accountId}/increasePostedCredits")
+    public ResponseEntity<Void> increasePostedCredits(
+            @PathVariable UUID accountId,
+            @RequestParam BigDecimal amount) {
+
+        accountCommandService.increasePostedCredits(accountId, amount);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -24,7 +24,6 @@ public class Account {
     @GeneratedValue(generator = "UUID")
     private UUID id;
     private String currency;
-    private BigDecimal balance = BigDecimal.ZERO;
     private BigDecimal postedDebits = BigDecimal.ZERO;
     private BigDecimal postedCredits = BigDecimal.ZERO;
     private BigDecimal pendingDebits = BigDecimal.ZERO;
@@ -38,11 +37,6 @@ public class Account {
         this.id = id;
         this.currency = currency;
         this.version = 0L;
-        this.balance = BigDecimal.ZERO;
-        this.postedDebits = BigDecimal.ZERO;
-        this.postedCredits = BigDecimal.ZERO;
-        this.pendingDebits = BigDecimal.ZERO;
-        this.pendingCredits = BigDecimal.ZERO;
     }
 
     public BigDecimal getPostedCredits() {
@@ -76,17 +70,10 @@ public class Account {
         if (getAvailableBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException("Insufficient funds for debit");
         }
-        addPendingDebit(amount);
+        adjustPendingDebits(amount);
     }
     public void credit(BigDecimal amount) {
-        addPendingCredit(amount);
-    }
-    private void addPendingDebit(BigDecimal amount) {
-        this.pendingDebits = this.getPendingDebits().add(amount);
-    }
-
-    private void addPendingCredit(BigDecimal amount) {
-        this.pendingCredits = this.getPendingCredits().add(amount);
+        adjustPendingCredits(amount);
     }
 
     @Transactional
@@ -100,6 +87,14 @@ public class Account {
     public void clearPendingEntries() {
         this.pendingDebits = BigDecimal.ZERO;
         this.pendingCredits = BigDecimal.ZERO;
+    }
+
+    public void adjustPendingDebits(BigDecimal amount) {
+        this.pendingDebits = getPendingDebits().add(amount);
+    }
+
+    public void adjustPendingCredits(BigDecimal amount) {
+        this.pendingCredits = getPendingCredits().add(amount);
     }
 
     public void adjustPostedDebits(BigDecimal amount) {
