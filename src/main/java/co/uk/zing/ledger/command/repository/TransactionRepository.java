@@ -23,4 +23,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
             @Param("accountId") UUID accountId,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
+
+
+    @Query("SELECT t FROM Transaction t LEFT JOIN FETCH t.entries WHERE t.id = :id")
+    Optional<Transaction> findByIdWithEntries(UUID id);
 }

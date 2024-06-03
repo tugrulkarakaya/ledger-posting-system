@@ -1,12 +1,9 @@
 package co.uk.zing.ledger.command.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,4 +23,16 @@ public class Entry {
     private LocalDateTime entryTime;
     private String type;
     private String direction; // Debit or Credit
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
+
+    public Entry(UUID accountId, BigDecimal amount, LocalDateTime entryTime, String type, String direction) {
+        this.accountId = accountId;
+        this.amount = amount;
+        this.entryTime = entryTime;
+        this.type = type;
+        this.direction = direction;
+    }
 }

@@ -48,10 +48,7 @@ public class ForexCommandHandlerService {
             throw new InsufficientFundsException("Insufficient funds in source account");
         }
 
-        // Create entries
-        Entry debitEntry = new Entry(UUID.randomUUID(), sourceAccount.getId(), command.getAmount(), LocalDateTime.now(), "Forex", "Debit");
         BigDecimal convertedAmount = command.getAmount().multiply(command.getExchangeRate());
-        Entry creditEntry = new Entry(UUID.randomUUID(), destinationAccount.getId(), convertedAmount, LocalDateTime.now(), "Forex", "Credit");
 
         // Update account pending balances (not posted yet)
         sourceAccount.debit(command.getAmount());
@@ -60,19 +57,30 @@ public class ForexCommandHandlerService {
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
 
+        // Create entries
+        Entry debitEntry = new Entry( sourceAccount.getId(), command.getAmount(), LocalDateTime.now(), "Forex", "Debit");
+        Entry creditEntry = new Entry( destinationAccount.getId(), convertedAmount, LocalDateTime.now(), "Forex", "Credit");
+
+
         // Create transaction
         Transaction transaction = new Transaction();
-        transaction.setId(UUID.randomUUID());
         transaction.setType("Forex");
         transaction.setStatus("Pending"); //ToDo: Convert To Enum
-        transaction.setEntries(Arrays.asList(debitEntry, creditEntry));
         transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setRequestId(command.getRequestId());
+
+        // Set the transaction for each entry
+        debitEntry.setTransaction(transaction);
+        creditEntry.setTransaction(transaction);
+
+        // add entries to the transaction
+        transaction.setEntries(Arrays.asList(debitEntry, creditEntry));
 
         // Persist transaction
-        transactionRepository.save(transaction);
+        transaction =  transactionRepository.save(transaction);
 
         // Publish events
-        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction));
+        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction.getId()));
         //ToDo: where is event listener
     }
 }

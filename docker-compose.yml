@@ -37,6 +37,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+      - "5005:5005"
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     networks:
