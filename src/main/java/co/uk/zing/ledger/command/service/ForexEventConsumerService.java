@@ -41,8 +41,10 @@ public class ForexEventConsumerService {
             Account account = accountRepository.findById(entry.getAccountId()).orElseThrow();
             if ("Debit".equals(entry.getDirection())) {
                 account.adjustPostedDebits(entry.getAmount());
+                account.adjustPendingDebits(entry.getAmount().negate());
             } else if ("Credit".equals(entry.getDirection())) {
                 account.adjustPostedCredits(entry.getAmount());
+                account.adjustPendingCredits(entry.getAmount().negate());
             }
             accountRepository.save(account);
         }
