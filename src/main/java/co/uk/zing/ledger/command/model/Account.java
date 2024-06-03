@@ -24,7 +24,6 @@ public class Account {
     @GeneratedValue(generator = "UUID")
     private UUID id;
     private String currency;
-    private BigDecimal balance = BigDecimal.ZERO;
     private BigDecimal postedDebits = BigDecimal.ZERO;
     private BigDecimal postedCredits = BigDecimal.ZERO;
     private BigDecimal pendingDebits = BigDecimal.ZERO;
