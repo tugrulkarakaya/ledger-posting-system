@@ -28,7 +28,7 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
-    private String BOOTSTRAP_SERVERS;// = "kafka:9092";
+    private String BOOTSTRAP_SERVERS;
     private static final String GROUP_ID = "ledger-posting-system-forex";
     private static final String DEFAULT_TOPIC = "forex-transactions";
 

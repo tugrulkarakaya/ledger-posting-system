@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +22,8 @@ public class AccountCreationSteps {
     @Given("the account creation endpoint is available")
     public void theAccountCreationEndpointIsAvailable() {
         // This can be a simple check to ensure the application context is loaded
+        Assertions.assertNotNull(restTemplate, "RestTemplate should be autowired and not null.");
+
     }
 
     @When("I send a request to create a new account with the currency {string}")

@@ -8,6 +8,7 @@ import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.AccountNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
