@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-    initialization-mode: always
+    url: jdbc:postgresql://postgres:5432/ledger
+    username: ledger_user
+    password: ledger_password
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,16 +12,57 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: ledger-posting-system-forex
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    template:
+      default-topic: forex-transactions
+
+# Logging settings
+logging:
+  level:
+    root: WARN
+    org:
+      hibernate: WARN
+      springframework:
+        web: INFO
+        kafka: DEBUG
+
+
+# Separate configuration for production
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/ledger
+    driver-class-name: org.postgresql.Driver
+    username: ledger_user
+    password: ledger_password
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   kafka:
     bootstrap-servers: kafka:9092
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
-    org.hibernate: INFO
-
-h2:
-  console:
-    enabled: true
-    path: /h2-console
+    root: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: WARN

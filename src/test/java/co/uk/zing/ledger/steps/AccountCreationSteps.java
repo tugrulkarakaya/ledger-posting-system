@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class AccountCreationSteps {
         Map<String, String> accountDetails = new HashMap<>();
         accountDetails.put("currency", currency);
 
-        response = restTemplate.postForEntity("/api/accounts", accountDetails, String.class);
+        response = restTemplate.postForEntity("/api/command/accounts/name", accountDetails, String.class);
     }
 
     @When("I send a request to create a new account without specifying a currency")

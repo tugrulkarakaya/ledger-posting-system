@@ -18,6 +18,7 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,8 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConfig {
 
-    private static final String BOOTSTRAP_SERVERS = "kafka:9092";
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String BOOTSTRAP_SERVERS;// = "kafka:9092";
     private static final String GROUP_ID = "ledger-posting-system-forex";
     private static final String DEFAULT_TOPIC = "forex-transactions";
 
