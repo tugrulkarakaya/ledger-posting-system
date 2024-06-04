@@ -4,7 +4,9 @@ import org.junit.runner.RunWith;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@ActiveProfiles("test")
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = "src/test/resources/features",
