@@ -19,7 +19,7 @@ public class ForexController {
     @Autowired
     private AccountQueryService accountQueryService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Void> executeForexOperation(@RequestBody ForexCommand command) {
         boolean isProcessed = forexCommandHandler.isProcessed(command.getRequestId());
         if (isProcessed) {
