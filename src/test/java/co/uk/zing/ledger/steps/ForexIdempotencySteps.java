@@ -127,7 +127,7 @@ public class ForexIdempotencySteps {
     }
 
 
-    @And("the final balances should be Cashier {long} GBP {long} and EUR {long}")
+    @And("the final available balances should be Cashier {long} GBP {long} and EUR {long}")
     public void theFinalBalancesShouldBeCashierGBPAndEUR(long cashier, long gbp, long eur) throws URISyntaxException, InterruptedException {
         Thread.sleep(1000);
         String urlCashier = getBaseUrl() + "/api/forexquery/accounts/"+Cashier;

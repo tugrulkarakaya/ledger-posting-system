@@ -1,7 +1,5 @@
 Feature: Forex Operation
 
-Feature: Forex Idempotency Testing
-
   Scenario: Idempotent Forex Operations with Different Return Types
     Given accounts exist: Cashier GBP, Account1 GBP, Account2 EUR
     And the Cashier account has 10000 GBP posted credits
@@ -10,4 +8,6 @@ Feature: Forex Idempotency Testing
     And the same forex operation GBP to EUR is repeated
     Then the first forex operation returns status 202 Accepted
     And the second and third forex operations return status 200 OK
-    And the final balances should be Cashier 900000 GBP 50000 and EUR 60000
+    And the final available balances should be Cashier 900000 GBP 50000 and EUR 60000
+
+
