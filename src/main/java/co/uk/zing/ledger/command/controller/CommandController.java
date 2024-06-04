@@ -25,11 +25,6 @@ public class CommandController {
         this.transactionCommandService = transactionCommandService;
     }
 
-    @PostMapping("/accounts")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account createdAccount = accountCommandService.createAccount(account.getCurrency());
-        return ResponseEntity.ok(createdAccount);
-    }
 
     @PostMapping("/accounts/name")
     public Account createAccount(@RequestBody String name) {
@@ -58,5 +53,11 @@ public class CommandController {
 
         accountCommandService.increasePostedCredits(accountId, amount);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/accounts")
+    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+        Account createdAccount = accountCommandService.createAccount(account.getCurrency());
+        return ResponseEntity.ok(createdAccount);
     }
 }

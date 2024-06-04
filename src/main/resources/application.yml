@@ -3,7 +3,7 @@ spring:
     active: dev # Change to 'prod' for production
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/ledger
+    url: jdbc:postgresql://localhost:5432/ledger
     username: ledger_user
     password: ledger_password
     driver-class-name: org.postgresql.Driver
@@ -18,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: ledger-posting-system-forex
       auto-offset-reset: earliest
@@ -31,41 +31,41 @@ spring:
 # Logging settings
 logging:
   level:
-    root: WARN
+    root: DEBUG
     org:
       hibernate: WARN
       springframework:
-        web: INFO
+        web: DEBUG
         kafka: DEBUG
 
-
-# Separate configuration for production
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-  datasource:
-    url: jdbc:postgresql://postgres:5432/ledger
-    driver-class-name: org.postgresql.Driver
-    username: ledger_user
-    password: ledger_password
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: false
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-  kafka:
-    bootstrap-servers: kafka:9092
-
-logging:
-  level:
-    root: DEBUG
-    org.springframework.web: INFO
-    org.hibernate: WARN
+#
+## Separate configuration for production
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#  datasource:
+#    url: jdbc:postgresql://postgres:5432/ledger
+#    driver-class-name: org.postgresql.Driver
+#    username: ledger_user
+#    password: ledger_password
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: false
+#    properties:
+#      hibernate:
+#        format_sql: false
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#
+#  kafka:
+#    bootstrap-servers: kafka:9092
+#
+#logging:
+#  level:
+#    root: DEBUG
+#    org.springframework.web: INFO
+#    org.hibernate: WARN
