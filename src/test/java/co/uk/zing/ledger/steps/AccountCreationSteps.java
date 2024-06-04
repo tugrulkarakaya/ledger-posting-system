@@ -45,10 +45,10 @@ public class AccountCreationSteps {
     }
 
     @When("I send a request to create a new account without specifying a currency")
-    public void iSendARequestToCreateANewAccountWithoutSpecifyingACurrency() {
+    public void iSendARequestToCreateANewAccountWithoutSpecifyingACurrency() throws URISyntaxException {
         Map<String, String> accountDetails = new HashMap<>();
-
-        response = restTemplate.postForEntity("/api/accounts", accountDetails, String.class);
+        String url = getBaseUrl() + "/api/command/accounts/name";
+        response = restTemplate.postForEntity(new URI(url), accountDetails, String.class);
     }
 
     @Then("the response status should be {int}")

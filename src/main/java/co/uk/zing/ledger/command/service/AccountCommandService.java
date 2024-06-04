@@ -4,6 +4,8 @@ import co.uk.zing.ledger.command.model.Account;
 import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.AccountNotFoundException;
+import co.uk.zing.ledger.exception.MissingAccountNameException;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,9 @@ public class AccountCommandService {
     }
 
     public Account createAccount(String currency) {
+        if(Strings.isEmpty(currency) || currency.equals("{}")){
+            throw new MissingAccountNameException("Currency is required");
+        }
         Account account = new Account();
         account.setCurrency(currency);
         return accountRepository.save(account);
