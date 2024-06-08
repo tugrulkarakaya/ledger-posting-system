@@ -28,26 +28,47 @@ public class ForexCommandHandlerService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    @Autowired
-    private EventPublisher eventPublisher;
+    private final  EventPublisher eventPublisher;
+
+    private final ForexEventConsumerService forexEventConsumerService;
 
     @Autowired
     private AccountCommandService accountCommandService;
+
+    public ForexCommandHandlerService(EventPublisher eventPublisher, ForexEventConsumerService forexEventConsumerService) {
+        this.eventPublisher = eventPublisher;
+        this.forexEventConsumerService = forexEventConsumerService;
+    }
 
     public boolean isProcessed(String requestId) {
         return transactionRepository.findByRequestId(requestId).isPresent();
     }
     @Transactional
     public void handle(ForexCommand command) {
+        Transaction transaction = getTransaction(command);
+        if (transaction == null) return;
+
+        if(command.isSynchronize()){
+            // complete forex operation
+            forexEventConsumerService.completeForexTransaction(transaction);
+        } else {
+            transactionRepository.save(transaction);
+            // Publish events
+            eventPublisher.publish(new ForexTransactionCreatedEvent(transaction.getId()));
+        }
+    }
+
+    private Transaction getTransaction(ForexCommand command) {
         if (isProcessed(command.getRequestId())) {
-            return;
+            return null;
         }
 
         // Validate accounts and balance
         Account sourceAccount = accountRepository.findById(UUID.fromString(command.getSourceAccountId())).orElseThrow();
         Account destinationAccount = accountRepository.findById(UUID.fromString(command.getDestinationAccountId())).orElseThrow();
 
-        if (accountCommandService.getAvailableBalance(sourceAccount.getId()).compareTo(command.getAmount())<0) {
+        //make quick balance check to accept request immediately. real check will be done during forex operation (a business decision)
+        if (sourceAccount.getAvailableBalance().compareTo(command.getAmount())<0) {
             throw new InsufficientFundsException("Insufficient funds in source account");
         }
 
@@ -79,10 +100,7 @@ public class ForexCommandHandlerService {
         transaction.setEntries(Arrays.asList(debitEntry, creditEntry));
 
         // Persist transaction
-        transaction =  transactionRepository.save(transaction);
-
-        // Publish events
-        eventPublisher.publish(new ForexTransactionCreatedEvent(transaction.getId()));
-        //ToDo: where is event listener
+        return transaction;
     }
+
 }
