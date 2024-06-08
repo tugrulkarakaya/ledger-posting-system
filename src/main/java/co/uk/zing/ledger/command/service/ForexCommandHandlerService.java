@@ -31,6 +31,9 @@ public class ForexCommandHandlerService {
     @Autowired
     private EventPublisher eventPublisher;
 
+    @Autowired
+    private AccountCommandService accountCommandService;
+
     public boolean isProcessed(String requestId) {
         return transactionRepository.findByRequestId(requestId).isPresent();
     }
@@ -44,7 +47,7 @@ public class ForexCommandHandlerService {
         Account sourceAccount = accountRepository.findById(UUID.fromString(command.getSourceAccountId())).orElseThrow();
         Account destinationAccount = accountRepository.findById(UUID.fromString(command.getDestinationAccountId())).orElseThrow();
 
-        if (sourceAccount.getAvailableBalance().compareTo(command.getAmount()) < 0) {
+        if (accountCommandService.getAvailableBalance(sourceAccount.getId()).compareTo(command.getAmount())<0) {
             throw new InsufficientFundsException("Insufficient funds in source account");
         }
 
@@ -58,14 +61,13 @@ public class ForexCommandHandlerService {
         accountRepository.save(destinationAccount);
 
         // Create entries
-        Entry debitEntry = new Entry( sourceAccount.getId(), command.getAmount(), LocalDateTime.now(), "Forex", "Debit");
-        Entry creditEntry = new Entry( destinationAccount.getId(), convertedAmount, LocalDateTime.now(), "Forex", "Credit");
+        Entry debitEntry = new Entry( sourceAccount.getId(), command.getAmount(), LocalDateTime.now(), "Forex", "Debit","Pending");
+        Entry creditEntry = new Entry( destinationAccount.getId(), convertedAmount, LocalDateTime.now(), "Forex", "Credit", "Pending");
 
 
         // Create transaction
         Transaction transaction = new Transaction();
         transaction.setType("Forex");
-        transaction.setStatus("Pending"); //ToDo: Convert To Enum
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setRequestId(command.getRequestId());
 

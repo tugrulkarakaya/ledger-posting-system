@@ -34,7 +34,6 @@ public class TransactionQueryService {
         return new TransactionDto(
                 transaction.getId(),
                 transaction.getType(),
-                transaction.getStatus(),
                 transaction.getCreatedAt(),
                 transaction.getUpdatedAt(),
                 transaction.getRequestId(),
