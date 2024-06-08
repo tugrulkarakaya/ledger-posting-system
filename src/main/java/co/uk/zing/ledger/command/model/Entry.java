@@ -23,16 +23,20 @@ public class Entry {
     private LocalDateTime entryTime;
     private String type;
     private String direction; // Debit or Credit
+    private LocalDateTime discardedAt;
+    private String status; // Pending, Posted, Failed
 
     @ManyToOne
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
-    public Entry(UUID accountId, BigDecimal amount, LocalDateTime entryTime, String type, String direction) {
+    public Entry(UUID accountId, BigDecimal amount, LocalDateTime entryTime, String type, String direction, String status) {
         this.accountId = accountId;
         this.amount = amount;
         this.entryTime = entryTime;
         this.type = type;
         this.direction = direction;
+        this.discardedAt = null;
+        this.status = status;
     }
 }
