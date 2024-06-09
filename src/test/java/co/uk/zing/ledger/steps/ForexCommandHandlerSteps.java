@@ -120,33 +120,6 @@ public class ForexCommandHandlerSteps {
         when(accountRepository.findById(UUID.fromString(destinationAccountId))).thenReturn(Optional.of(destinationAccount));
     }
 
-//    @Given("a synchronized forex command")
-//    public void a_synchronized_forex_command() {
-//        String sourceAccountId = UUID.randomUUID().toString();
-//        String destinationAccountId = UUID.randomUUID().toString();
-//        BigDecimal amount = BigDecimal.valueOf(100);
-//        BigDecimal exchangeRate = BigDecimal.valueOf(1.1);
-//        requestId = "test-request-id";
-//
-//        forexCommand = ForexCommand.builder()
-//                .sourceAccountId(sourceAccountId)
-//                .destinationAccountId(destinationAccountId)
-//                .amount(amount).exchangeRate(exchangeRate)
-//                .requestId(requestId)
-//                .isSynchronize(true).build();
-//
-//        Account sourceAccount = new Account();
-//        sourceAccount.setId(UUID.fromString(sourceAccountId));
-//        sourceAccount.setAvailableBalance(BigDecimal.valueOf(200));
-//
-//        Account destinationAccount = new Account();
-//        destinationAccount.setId(UUID.fromString(destinationAccountId));
-//        destinationAccount.setAvailableBalance(BigDecimal.valueOf(100));
-//
-//        when(accountRepository.findById(UUID.fromString(sourceAccountId))).thenReturn(Optional.of(sourceAccount));
-//        when(accountRepository.findById(UUID.fromString(destinationAccountId))).thenReturn(Optional.of(destinationAccount));
-//    }
-
     @When("I check if the request is processed")
     public void i_check_if_the_request_is_processed() {
         isProcessed = forexCommandHandlerService.isProcessed(requestId);
@@ -181,18 +154,23 @@ public class ForexCommandHandlerSteps {
         verify(accountRepository, atLeast(2)).save(any(Account.class));
     }
 
+    @Then("an event should not be published")
+    public void an_event_should_not_be_published() {
+        verify(eventPublisher, never()).publish(any(ForexTransactionCreatedEvent.class));
+    }
+
     @Then("an event should be published")
     public void an_event_should_be_published() {
-        verify(eventPublisher, never()).publish(any(ForexTransactionCreatedEvent.class));
+        verify(eventPublisher, times(1)).publish(any(ForexTransactionCreatedEvent.class));
     }
 
     @Then("an InsufficientFundsException should be thrown")
     public void an_insufficient_funds_exception_should_be_thrown() {
         Assertions.assertTrue(exception instanceof InsufficientFundsException);
     }
-//
-//    @Then("the forex transaction should be completed")
-//    public void the_forex_transaction_should_be_completed() {
-//        verify(forexEventConsumerService, times(1)).completeForexTransaction(any(Transaction.class));
-//    }
+
+    @And("the forex command is async")
+    public void theForexCommandIsAsync() {
+        forexCommand.setSynchronize(false);
+    }
 }

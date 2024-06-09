@@ -10,19 +10,22 @@ Feature: Forex Command Handler
     When I check if the request is processed
     Then the result should be false
 
-  Scenario: Handle forex command successfully
+  Scenario: Handle forex sync command successfully
     Given a forex command with sufficient funds
     When I handle the forex command
     Then the transaction should be saved
     And the accounts should be updated
+    And an event should not be published
+
+  Scenario: Handle forex Async command successfully
+    Given a forex command with sufficient funds
+    And the forex command is async
+    When I handle the forex command
+    Then the transaction should be saved
     And an event should be published
-#
-#  Scenario: Handle forex command with insufficient funds
-#    Given a forex command with insufficient funds
-#    When I handle the forex command
-#    Then an InsufficientFundsException should be thrown
-#
-#  Scenario: Handle synchronized forex command
-#    Given a synchronized forex command
-#    When I handle the forex command
-#    Then the forex transaction should be completed
+
+  Scenario: Handle forex command with insufficient funds
+    Given a forex command with insufficient funds
+    When I handle the forex command
+    Then an InsufficientFundsException should be thrown
+
