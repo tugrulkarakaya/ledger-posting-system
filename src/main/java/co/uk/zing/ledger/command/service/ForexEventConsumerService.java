@@ -8,6 +8,7 @@ import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.AccountNotFoundException;
 import co.uk.zing.ledger.exception.InsufficientFundsException;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,7 +27,7 @@ public class ForexEventConsumerService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-    private final AccountCommandService accountCommandService;
+    @Setter private  AccountCommandService accountCommandService;
 
     public ForexEventConsumerService(AccountRepository accountRepository, TransactionRepository transactionRepository, AccountCommandService accountCommandService) {
         this.accountRepository = accountRepository;

@@ -1,7 +1,7 @@
 package co.uk.zing.ledger;
 
 
-import co.uk.zing.ledger.config.TestRestTemplateConfig;
+import co.uk.zing.ledger.config.TestConfig;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 @SpringBootTest
 @CucumberContextConfiguration
 @ContextConfiguration(classes = {LedgerApplication.class})
-@Import(TestRestTemplateConfig.class) // Import the configuration
+@Import(TestConfig.class) // Import the configuration
 public class CucumberSpringConfiguration {
 }
 

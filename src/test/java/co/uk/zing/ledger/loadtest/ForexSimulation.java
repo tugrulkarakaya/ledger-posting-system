@@ -1,4 +1,4 @@
-package co.uk.zing.ledger.integration;
+package co.uk.zing.ledger.loadtest;
 
 import io.gatling.javaapi.core.*;
 

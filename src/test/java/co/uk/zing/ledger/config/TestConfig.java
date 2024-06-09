@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import static org.mockito.Mockito.mock;
 
 @Configuration
-public class TestRestTemplateConfig {
+public class TestConfig {
 
     @Bean
     public TestRestTemplate testRestTemplate() {
