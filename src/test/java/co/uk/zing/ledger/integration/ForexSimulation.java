@@ -42,7 +42,7 @@ public class ForexSimulation extends Simulation {
 
     // Define the scenario with the condition
     ScenarioBuilder scn = scenario("Forex Create Load Test")
-            .repeat(100).on(
+            .repeat(300).on(
                     exec(createForexRequest)
                             .exitHereIfFailed()
                             .exec(session -> {
