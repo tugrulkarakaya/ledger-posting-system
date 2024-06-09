@@ -10,6 +10,8 @@ import co.uk.zing.ledger.command.model.Transaction;
 import co.uk.zing.ledger.command.repository.AccountRepository;
 import co.uk.zing.ledger.command.repository.TransactionRepository;
 import co.uk.zing.ledger.exception.InsufficientFundsException;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +24,10 @@ import java.util.UUID;
 @Service
 public class ForexCommandHandlerService {
 
-    @Autowired
+    @Autowired @Setter
     private AccountRepository accountRepository;
 
-    @Autowired
+    @Autowired @Setter
     private TransactionRepository transactionRepository;
 
     private final  EventPublisher eventPublisher;
