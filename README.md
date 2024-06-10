@@ -101,7 +101,11 @@ This interface allows you to interact with the APIs directly, making it easier t
 
 ### Load Testing
 
+
 The forex transaction process is used in the load test. You can view the load test code in the following internal link:
+   ```sh
+   mvn gatling:test
+   ```
 
 [ForexSimulation.java](src/test/java/co/uk/zing/ledger/loadtest/ForexSimulation.java)
 
@@ -134,4 +138,32 @@ Although I did not develop this project with TDD (I have previously made a prese
 - [Forex Command Handler Feature](src/test/resources/features/unit_tests/forex_command_handler.feature)
 - [Forex Command Handler Steps](src/test/java/co/uk/zing/ledger/steps/ForexCommandHandlerSteps.java)
 
+### Exception Management
+
+Exception handling is a crucial aspect of a ledger posting system. For this demo application, I have created sample exceptions including `AccountNotFound`, `InsufficientFunds`, and `MissingAccountName`. A Global Exception Handler has been added to manage these exceptions at the REST level.
+
+In a system like ledger posting, it is essential to have comprehensive exception management at the controller level, service level, and even for logging purposes. Proper handling of exceptions ensures robustness and reliability.
+
+I have implemented three sample exceptions and included a unit test scenario for the `InsufficientFunds` exception. However, it is important to note that this area is critical for the overall stability and reliability of a ledger system and should be extensively developed and tested.
+
+
 ### Additional Information for Reviewers
+
+This project includes Swagger for API documentation and Docker Compose to facilitate easy setup and running of the application. Although primarily a demonstration, it incorporates CQRS and Event Sourcing patterns with Kafka for event messaging to handle both synchronous and asynchronous communication effectively.
+
+While not developed with a strict Test-Driven Development (TDD) approach, the project reflects a strong understanding of Behavior-Driven Development (BDD) principles. Future improvements could include more comprehensive testing using tools like Gherkin with Qtember or the Robot Framework to enhance component and integration testing.
+### Opportunities for Improvement
+
+- **Query Service in Another Docker** Currently, there is just one application running in Docker Compose, but the query and command paths should run in two different applications. This requires adding a new Docker application YAML file for configuration and another URL, not on the 8080 port. This separation would better adhere to the CQRS pattern.
+
+- **Testing** Enhance the testing framework by incorporating more comprehensive tests using tools like Gherkin with Qtember or the Robot Framework to improve component and integration testing.
+
+- **Demonstration of BDD**: I only wanted to demonstrate how BDD works. However, applications can be much more comprehensive or complex.
+
+- **Testing**: Integration, unit, and possibly component tests have been mentioned and can be further developed.
+
+- **Redis Cache Implementation**: I planned to implement Redis Cache to enhance performance. This isn't a rocket science project, but it took a lot of time.
+  Performance Optimization: At NatWest, I was able to implement a system between microservice infrastructures, reducing the latency from 90 milliseconds to 9-10 milliseconds. I planned to do this in the current project but couldn't find enough time.
+
+
+
