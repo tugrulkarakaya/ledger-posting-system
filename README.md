@@ -54,7 +54,7 @@ To debug the application, connect to port `5005` using your preferred IDE.
 
 The core business logic of this application revolves around maintaining a highly reliable, scalable, and efficient ledger system. The system adheres to principles of immutability, double-entry accounting, concurrency control, efficient aggregations, client-supplied timestamps, atomic transactions, balance caching, audit logging, high throughput, and scalability.
 
-The design and implementation guidelines for this ledger system are based on the comprehensive principles outlined in the document [How to Scale a Ledger.pdf](docs/How to Scale a Ledger.pdf).
+The design and implementation guidelines for this ledger system are based on the comprehensive principles outlined in the document [How to Scale a Ledger.pdf](./docs/How to Scale a Ledger.pdf).
 
 ### Summary of "How to Scale a Ledger.pdf"
 
