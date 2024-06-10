@@ -25,7 +25,7 @@ public class Transaction {
     @Column(unique = true)
     private String requestId;
 
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Entry> entries;
 
     public Transaction(UUID id, String type, List<Entry> entries, String requestId) {
