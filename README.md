@@ -76,3 +76,62 @@ Key features of a scalable ledger database include:
 10. Scalability: Designed to scale with business needs, potentially through sharding or using scalable databases.
 
 These principles are critical in building a ledger system that not only meets current business needs but can also scale efficiently as the business grows.
+
+## Project Features and Requirements
+
+### Communication Capabilities
+
+The application can process forex operations either synchronously or asynchronously. This behavior is determined by the payload of the REST request, specifically the `"synchronize": false` field.
+
+- **Synchronous Requests**: If the request is synchronous, the application processes it directly.
+- **Asynchronous Requests**: If the request is asynchronous (i.e., `"synchronize": false`), the application accepts the request and writes it to Kafka for later processing.
+
+When a request arrives, the application makes a quick check to ensure the cached available balance is sufficient to accept the request. If the cached balance is adequate, the request is accepted. The real available balance, calculated from actual transactions, will be processed during the forex operation. This approach ensures efficient handling of requests while maintaining accuracy and consistency in balance management.
+
+### API Documentation
+
+The project's APIs can be reviewed using Swagger. Swagger provides an interactive interface for exploring and testing the APIs. This documentation includes detailed information about each endpoint, including request and response formats, parameters, and example payloads.
+
+To access the Swagger UI, navigate to the following URL:
+
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+This interface allows you to interact with the APIs directly, making it easier to understand and test their functionality.
+
+
+### Load Testing
+
+The forex transaction process is used in the load test. You can view the load test code in the following internal link:
+
+[ForexSimulation.java](src/test/java/co/uk/zing/ledger/loadtest/ForexSimulation.java)
+
+This load test simulates various scenarios to ensure the system can handle high transaction volumes efficiently.
+
+**Note**:
+- The current test uses static account IDs. To improve this, the process should be modified to create accounts first, increase the system balance, and then start the test. Currently, the balance is increased every 100 requests.
+
+  To run this load test, please follow these steps:
+   1. Create two accounts.
+   2. Call the endpoint to increase the posted credit for these accounts.
+   3. Update the account IDs in the `ForexSimulation.java` code with the newly created account IDs.
+   4. Run the load test.
+
+  This ensures the load test operates with dynamically created accounts and accurately simulates real-world usage.
+
+- Roughly 8-10% of the load test requests fail. The reason for these failures is that all records are versioned, so any database change during the operation prevents the current operation from continuing. This issue needs to be handled by retrying with new values. This has not been implemented yet, but it is a known issue. (**`ObjectOptimisticLockingFailureException`**)
+
+### Integration and Unit Test Cases
+
+Tests are placed under [Integration and Unit Test Cases](https://github.com/tugrulkarakaya/ledger-posting-system/tree/13-readme-file/src/test/resources/features). As this is a demo app, I have implemented a limited set of tests, including forex command handler unit tests, account creation, and forex operation REST API requests.
+
+In my recent job, I use Gherkin language with Robot Framework for integration tests and Cucumber (again with Gherkin) for component tests.
+
+Although I did not develop this project with TDD (I have previously made a presentation and a demo KATA for TDD; if I can find the video, I will add the URL), BDD-driven tests can be found to demonstrate my skill.
+
+**Note**: Integration tests currently require Docker Compose to be up and running. This part can also be improved.
+
+**Sample Test Files**:
+- [Forex Command Handler Feature](src/test/resources/features/unit_tests/forex_command_handler.feature)
+- [Forex Command Handler Steps](src/test/java/co/uk/zing/ledger/steps/ForexCommandHandlerSteps.java)
+
+### Additional Information for Reviewers
