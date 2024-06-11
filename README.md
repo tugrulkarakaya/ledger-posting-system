@@ -1,3 +1,5 @@
+**Youtube Video Link**: https://youtu.be/qy88zaSoIfQ
+
 # Ledger Posting System
 
 This project implements a scalable ledger posting system using Spring Boot and microservices architecture, leveraging CQRS and Event Sourcing patterns. The system is designed to handle heavy write loads efficiently and provides APIs for asset transfers and account management.
