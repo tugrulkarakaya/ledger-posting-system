@@ -18,7 +18,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     Optional<Transaction> findByRequestId(String requestId);
 
 
-    @Query("SELECT t FROM Transaction t JOIN t.entries e WHERE e.accountId = :accountId AND t.createdAt BETWEEN :startDate AND :endDate")
+    @Query("SELECT t FROM Transaction t JOIN t.entries e WHERE e.accountId = :accountId AND t.createdAt BETWEEN :startDate AND :endDate AND e.discardedAt IS NULL")
     List<Transaction> findTransactionsByAccountIdAndDateRange(
             @Param("accountId") UUID accountId,
             @Param("startDate") LocalDateTime startDate,
